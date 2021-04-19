@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Todo = ({ title, completed, removeTodo }) => {
+const Todo = ({ title, completed, removeTodo, editTodo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(title);
   const [tempValue, setTempValue] = useState(title);
@@ -24,13 +24,13 @@ const Todo = ({ title, completed, removeTodo }) => {
     if (key === 27) {
       handleReset();
     } else if (key === 13) {
-      setValue(tempValue);
-      handleClose();
+      handleValueSubmit();
     }
   };
 
-  const handleValueSubmit = () => {
+  const handleValueSubmit = async () => {
     setValue(tempValue);
+    editTodo({ title: tempValue });
     handleClose();
   };
 
@@ -40,7 +40,11 @@ const Todo = ({ title, completed, removeTodo }) => {
   };
 
   const handleDone = () => {
-    setDone((oldDone) => !oldDone);
+    setDone((oldDone) => {
+      const newState = !oldDone;
+      editTodo({ completed: newState });
+      return newState;
+    });
   };
 
   return (

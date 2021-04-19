@@ -1,5 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
+
 const todoRoutes = require("./routes/todoRoutes");
 
 const app = express();
@@ -13,6 +15,7 @@ const connectionOptions = {
 };
 
 app.use(express.json());
+app.use(cors());
 
 mongoose
   .connect("mongodb://localhost/todolist", connectionOptions)
