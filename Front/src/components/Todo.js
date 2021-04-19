@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
-const Todo = ({ title }) => {
+const Todo = ({ title, completed, removeTodo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(title);
   const [tempValue, setTempValue] = useState(title);
+  const [done, setDone] = useState(completed);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -28,72 +29,88 @@ const Todo = ({ title }) => {
     }
   };
 
-  const handleValueSubmit = (e) => {
+  const handleValueSubmit = () => {
     setValue(tempValue);
-    handleClose(); 
+    handleClose();
   };
-  
+
   const handleReset = () => {
     setTempValue(value);
     handleClose();
   };
 
-  return isEditing ? (
-    <div className="row">
-      <div className="column seven wide">
-        <div className="ui input fluid">
-          <input
-            autoFocus
-            onChange={handleValueChange}
-            value={tempValue}
-            onKeyDown={handleClick}
-          />
-        </div>
-      </div>
-      <div className="column one wide">
-        <button
-          type=""
-          className="ui button circular icon green"
-          onClick={() => handleValueSubmit()}
-        >
-          <i className="white check icon"></i>
-        </button>
-      </div>
+  const handleDone = () => {
+    setDone((oldDone) => !oldDone);
+  };
 
-      <div className="column one wide">
-        <button
-          type=""
-          className="ui button circular icon red"
-          onClick={() => handleReset()}
-        >
-          <i className="white remove icon"></i>
-        </button>
-      </div>
-    </div>
-  ) : (
+  return (
     <div className="row">
-      <div className="column five wide">
-        <h2>{value}</h2>
-      </div>
-      <div className="column one wide">
-        <button type="" className="ui button circular icon green">
-          <i className="white check icon"></i>
-        </button>
-      </div>
-      <div className="column one wide">
-        <button
-          type=""
-          className="ui button circular icon yellow"
-          onClick={() => handleEdit()}
-        >
-          <i className="white edit icon"></i>
-        </button>
-      </div>
-      <div className="column one wide">
-        <button type="" className="ui button circular icon red">
-          <i className="white remove icon"></i>
-        </button>
-      </div>
+      {isEditing ? (
+        <>
+          <div className="column seven wide">
+            <div className="ui input fluid">
+              <input
+                autoFocus
+                onChange={handleValueChange}
+                value={tempValue}
+                onKeyDown={handleClick}
+              />
+            </div>
+          </div>
+          <div className="column one wide">
+            <button
+              type=""
+              className="ui button circular icon green"
+              onClick={() => handleValueSubmit()}
+            >
+              <i className="white check icon"></i>
+            </button>
+          </div>
+
+          <div className="column one wide">
+            <button
+              type=""
+              className="ui button circular icon red"
+              onClick={() => handleReset()}
+            >
+              <i className="white remove icon"></i>
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="column five wide">
+            <h2 className={"ui header " + (done ? "green" : "")}>{value}</h2>
+          </div>
+          <div className="column one wide">
+            <button
+              type=""
+              className={"ui button circular icon " + (done ? "blue" : "green")}
+              onClick={handleDone}
+            >
+              <i className="white check icon"></i>
+            </button>
+          </div>
+          <div className="column one wide">
+            <button
+              type=""
+              className="ui button circular icon yellow"
+              onClick={() => handleEdit()}
+            >
+              <i className="white edit icon"></i>
+            </button>
+          </div>
+          <div className="column one wide">
+            <button
+              type=""
+              className="ui button circular icon red"
+              onClick={removeTodo}
+            >
+              <i className="white remove icon"></i>
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
